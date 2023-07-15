@@ -34,31 +34,6 @@ define Package/$(PKG_NAME)/description
     This package contains LuCI configuration pages for VH USB Service.
 endef
 
-#preinst : 安装前执行 , 一般可以用来新建目录 ,
-#如果文件拷贝到一个不存在的目录会出错,所以有些需要安装前新建目录.或者处理一些文件冲突,将原来的文件备份#
-#define Package/$(PKG_NAME)/preinst
-#endef
-
-#postinst : 安装完成执行 ,一般就是安装后给权限,或者直接启动.
-# 安装后执行的脚本
-# 这里大概作用就是安装后给./usr/bin/vhusbd添加执行权限.
-
-define Package/$(PKG_NAME)/postinst
-#!/bin/sh
-if [ -z "$${IPKG_INSTROOT}" ]; then
-	chmod 755 "$${IPKG_INSTROOT}/usr/bin/vhusbd" >/dev/null 2>&1
-	chmod 755 "$${IPKG_INSTROOT}/usr/bin/vhusbd" >/dev/null 2>&1
-fi
-exit 0
-
-endef
-
-#define Package/$(PKG_NAME)/prerm : 卸载前执行
-#endef
-
-#define Package/$(PKG_NAME)/postrm : 卸载完成执行
-#endef
-
 define Build/Prepare
 endef
 
@@ -81,7 +56,6 @@ endif
 # 安装作业
 # 这里一般就是复制文件
 # 如果有更多文件直接参考修改,非常简单.
-
 define Package/$(PKG_NAME)/install
 
 	# 两条命令一组
@@ -94,12 +68,55 @@ define Package/$(PKG_NAME)/install
    
 	$(INSTALL_DIR) $(1)/
 	cp -pR ./root/* $(1)/
+	chmod 755 $(1)/etc/init.d/vhusbd
 	#$(INSTALL_BIN) ./root/* $(1)/ 
   
 	$(INSTALL_DIR) $(1)/usr/bin
 	cp -pR ./bin/$(EXE_FILE) $(1)/usr/bin/vhusbd
+	chmod 755 $(1)/usr/bin/vhusbd
 	#$(INSTALL_BIN) ./bin/$(EXE_FILE) $(1)/usr/bin/vhusbd
  
+endef
+
+# preinst : 安装前执行 , 一般可以用来新建目录 ,
+# 如果文件拷贝到一个不存在的目录会出错,所以有些需要安装前新建目录.或者处理一些文件冲突,将原来的文件备份
+define Package/$(PKG_NAME)/preinst
+	#!/bin/bash
+	echo 'installing $(PKG_NAME)'
+endef
+
+# postinst : 安装完成执行 ,一般就是安装后给权限,或者直接启动.
+# 安装后执行的脚本
+# 这里大概作用就是安装后给./usr/bin/vhusbd添加执行权限.
+define Package/$(PKG_NAME)/postinst
+	#!/bin/sh
+	# check if we are on real system
+	if [ -z "$${IPKG_INSTROOT}" ]; then
+		echo "Enabling rc.d symlink for $(PKG_NAME)"
+    		chmod 755 /usr/bin/vhusbd >/dev/null 2>&1
+     		chmod 755 /etc/init.d/vhusbd >/dev/null 2>&1
+		/etc/init.d/vhusbd enable
+	fi
+	echo '$(PKG_NAME) installed successed !'
+	exit 0
+endef
+
+# prerm : 卸载前执行
+define Package/$(PKG_NAME)/prerm
+	#!/bin/sh
+	# check if we are on real system
+	if [ -z "$${IPKG_INSTROOT}" ]; then
+		echo "Removing rc.d symlink for $(PKG_NAME)"
+		/etc/init.d/vhusbd disable
+	fi
+	echo 'removeing $(PKG_NAME)'
+	exit 0
+endef
+
+#postrm : 卸载完成执行
+define Package/$(PKG_NAME)/postrm
+	#!/bin/bash
+	echo '$(PKG_NAME) remove successed !'
 endef
 
 $(eval $(call BuildPackage,$(PKG_NAME)))
