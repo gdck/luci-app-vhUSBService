@@ -6,10 +6,10 @@
 
 include $(TOPDIR)/rules.mk
 
-# PAK NAME ±ØĞëºÍ°üËùÔÚÎÄ¼ş¼ĞÒ»Ñù.
+# PAK NAME å¿…é¡»å’ŒåŒ…æ‰€åœ¨æ–‡ä»¶å¤¹ä¸€æ ·.
 PKG_NAME:=luci-app-vhUSBService
 
-# ÏÂÃæÈı¸ö²ÎÊıËæ±ãÌîĞ´.
+# ä¸‹é¢ä¸‰ä¸ªå‚æ•°éšä¾¿å¡«å†™.
 LUCI_PKGARCH:=all
 PKG_VERSION:=2.0.2
 PKG_RELEASE:=20210917
@@ -17,9 +17,9 @@ PKG_RELEASE:=20210917
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 include $(INCLUDE_DIR)/package.mk
 
-# ÏÂÃæÊÇÏÔÊ¾ÔÚmenuconfigÖĞµÄ²Ëµ¥Â·¾¶
-# SUBMENUºóÃæ¸ú×ÅµÄÊÇÎÒ×Ô¼ºdiyµÄÒ»¸ö²Ëµ¥Ñ¡Ïî,
-# Õâ¸ö²Ëµ¥ÀïÃæÈ«ÊÇ×Ô¼ºµÄ°ü,±È½ÏºÃÕÒ.
+# ä¸‹é¢æ˜¯æ˜¾ç¤ºåœ¨menuconfigä¸­çš„èœå•è·¯å¾„
+# SUBMENUåé¢è·Ÿç€çš„æ˜¯æˆ‘è‡ªå·±diyçš„ä¸€ä¸ªèœå•é€‰é¡¹,
+# è¿™ä¸ªèœå•é‡Œé¢å…¨æ˜¯è‡ªå·±çš„åŒ…,æ¯”è¾ƒå¥½æ‰¾.
 define Package/$(PKG_NAME)
  	SECTION:=luci
 	CATEGORY:=LuCI
@@ -29,23 +29,19 @@ define Package/$(PKG_NAME)
 	PKGARCH:=all
 endef
 
-# °ü½éÉÜËµÃ÷,²»ÒªÓÃÖĞÎÄ.
+# åŒ…ä»‹ç»è¯´æ˜,ä¸è¦ç”¨ä¸­æ–‡.
 define Package/$(PKG_NAME)/description
     This package contains LuCI configuration pages for VH USB Service.
 endef
 
+#preinst : å®‰è£…å‰æ‰§è¡Œ , ä¸€èˆ¬å¯ä»¥ç”¨æ¥æ–°å»ºç›®å½• ,
+#å¦‚æœæ–‡ä»¶æ‹·è´åˆ°ä¸€ä¸ªä¸å­˜åœ¨çš„ç›®å½•ä¼šå‡ºé”™,æ‰€ä»¥æœ‰äº›éœ€è¦å®‰è£…å‰æ–°å»ºç›®å½•.æˆ–è€…å¤„ç†ä¸€äº›æ–‡ä»¶å†²çª,å°†åŸæ¥çš„æ–‡ä»¶å¤‡ä»½#
+#define Package/$(PKG_NAME)/preinst
+#endef
 
-#preinst : °²×°Ç°Ö´ĞĞ , Ò»°ã¿ÉÒÔÓÃÀ´ĞÂ½¨Ä¿Â¼ ,
-#Èç¹ûÎÄ¼ş¿½±´µ½Ò»¸ö²»´æÔÚµÄÄ¿Â¼»á³ö´í,ËùÒÔÓĞĞ©ĞèÒª°²×°Ç°ĞÂ½¨Ä¿Â¼.»òÕß´¦ÀíÒ»Ğ©ÎÄ¼ş³åÍ»,½«Ô­À´µÄÎÄ¼ş±¸·İ#
-define Package/$(PKG_NAME)/preinst
-endef
-
-
-
-
-#postinst : °²×°Íê³ÉÖ´ĞĞ ,Ò»°ã¾ÍÊÇ°²×°ºó¸øÈ¨ÏŞ,»òÕßÖ±½ÓÆô¶¯.
-# °²×°ºóÖ´ĞĞµÄ½Å±¾
-# ÕâÀï´ó¸Å×÷ÓÃ¾ÍÊÇ°²×°ºó¸ø./usr/bin/vhusbdÌí¼ÓÖ´ĞĞÈ¨ÏŞ.
+#postinst : å®‰è£…å®Œæˆæ‰§è¡Œ ,ä¸€èˆ¬å°±æ˜¯å®‰è£…åç»™æƒé™,æˆ–è€…ç›´æ¥å¯åŠ¨.
+# å®‰è£…åæ‰§è¡Œçš„è„šæœ¬
+# è¿™é‡Œå¤§æ¦‚ä½œç”¨å°±æ˜¯å®‰è£…åç»™./usr/bin/vhusbdæ·»åŠ æ‰§è¡Œæƒé™.
 
 define Package/$(PKG_NAME)/postinst
 #!/bin/sh
@@ -55,11 +51,13 @@ if [ -z "$${IPKG_INSTROOT}" ]; then
 fi
 exit 0
 
-#prerm : Ğ¶ÔØÇ°Ö´ĞĞ
-
-#postrm : Ğ¶ÔØÍê³ÉÖ´ĞĞ
-
 endef
+
+#define Package/$(PKG_NAME)/prerm : å¸è½½å‰æ‰§è¡Œ
+#endef
+
+#define Package/$(PKG_NAME)/postrm : å¸è½½å®Œæˆæ‰§è¡Œ
+#endef
 
 define Build/Prepare
 endef
@@ -80,30 +78,29 @@ ifeq ($(ARCH),arm)
 	EXE_FILE:=vhusbdarm
 endif
 
-# °²×°×÷Òµ
-# ÕâÀïÒ»°ã¾ÍÊÇ¸´ÖÆÎÄ¼ş
-# Èç¹ûÓĞ¸ü¶àÎÄ¼şÖ±½Ó²Î¿¼ĞŞ¸Ä,·Ç³£¼òµ¥.
+# å®‰è£…ä½œä¸š
+# è¿™é‡Œä¸€èˆ¬å°±æ˜¯å¤åˆ¶æ–‡ä»¶
+# å¦‚æœæœ‰æ›´å¤šæ–‡ä»¶ç›´æ¥å‚è€ƒä¿®æ”¹,éå¸¸ç®€å•.
 
 define Package/$(PKG_NAME)/install
 
-	# Á½ÌõÃüÁîÒ»×é
-	# µÚÒ»ÌõÊÇÖ¸¶¨¸´ÖÆµ½µÄÄ¿Â¼
-	# µÚ¶şÌõÊÇ¿½±´ÎÄ¼ş.
+	# ä¸¤æ¡å‘½ä»¤ä¸€ç»„
+	# ç¬¬ä¸€æ¡æ˜¯æŒ‡å®šå¤åˆ¶åˆ°çš„ç›®å½•
+	# ç¬¬äºŒæ¡æ˜¯æ‹·è´æ–‡ä»¶.
  
 	$(INSTALL_DIR) $(1)/usr/lib/lua/luci
-	#cp -pR ./luasrc/* $(1)/usr/lib/lua/luci
-  $(INSTALL_BIN) ./luasrc/* $(1)/usr/lib/lua/luci
+	cp -pR ./luasrc/* $(1)/usr/lib/lua/luci
+	#$(INSTALL_BIN) ./luasrc/* $(1)/usr/lib/lua/luci
    
 	$(INSTALL_DIR) $(1)/
-	#cp -pR ./root/* $(1)/
-  $(INSTALL_BIN) ./root/* $(1)/ 
+	cp -pR ./root/* $(1)/
+	#$(INSTALL_BIN) ./root/* $(1)/ 
   
 	$(INSTALL_DIR) $(1)/usr/bin
-	#cp -pR ./bin/$(EXE_FILE) $(1)/usr/bin/vhusbd
-  $(INSTALL_BIN) ./bin/$(EXE_FILE) $(1)/usr/bin/vhusbd
+	cp -pR ./bin/$(EXE_FILE) $(1)/usr/bin/vhusbd
+	#$(INSTALL_BIN) ./bin/$(EXE_FILE) $(1)/usr/bin/vhusbd
  
 endef
-
 
 $(eval $(call BuildPackage,$(PKG_NAME)))
 
